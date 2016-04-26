@@ -5,7 +5,7 @@
     <TimePicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/timePicker"
+        android:id="@+id/TimePicker"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -13,8 +13,8 @@
         android:entries="@array/days"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner"
-        android:layout_below="@+id/timePicker"
+        android:id="@+id/DaySpinner"
+        android:layout_below="@+id/TimePicker"
         android:layout_centerHorizontal="true"
         android:spinnerMode="dropdown" />
 
