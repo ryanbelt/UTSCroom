@@ -22,10 +22,19 @@
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/EmptyRoomButton"
         android:text="@string/check_empty_room"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/check_room_schedule"
+        android:id="@+id/RoomSchedule"
+        android:layout_marginTop="43dp"
+        android:layout_below="@+id/EmptyRoomButton"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

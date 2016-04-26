@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">UTSCroom</string>
     <string name="check_empty_room">Check Empty Room</string>
+    <string name="check_room_schedule">Check Room Schedule</string>
+    <string name="start">Start</string>
+    <string-array name="days">
+        <item>Today</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
 </resources>
