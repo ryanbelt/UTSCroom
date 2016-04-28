@@ -1,5 +1,6 @@
 package ryanbelt.utscroom;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +34,12 @@ public class EmptyRoomInput extends AppCompatActivity {
                 int hour = timePick.getCurrentHour();
                 int min = timePick.getCurrentMinute();
                 int day = daySpinner.getSelectedItemPosition()-1;
-                Log.d("myCheck",String.format("%d   %d:%d", day, hour, min));
+
+                Intent i = new Intent(EmptyRoomInput.this, EmptyRoomOutput.class);
+                i.putExtra("hour",hour);
+                i.putExtra("min",min);
+                i.putExtra("day",day);
+                startActivity(i);
             }
         });
     }
