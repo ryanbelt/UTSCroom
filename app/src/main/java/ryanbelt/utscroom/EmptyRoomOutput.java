@@ -71,7 +71,11 @@ public class EmptyRoomOutput extends AppCompatActivity implements AsyncResponse{
         int backgroundColor;
         //set column title
         textView=(TextView)findViewById(R.id.emptyTitle);
-        textView.setText(String.format("%s:    %d:%d",weekDay,hour,min));
+        if(min<10) {
+            textView.setText(String.format("%s:    %d:%s", weekDay, hour, "0" + String.valueOf(min)));
+        }else{
+            textView.setText(String.format("%s:    %d:%d", weekDay, hour, min));
+        }
         textView=(TextView)findViewById(R.id.emptyTableRooms);
         textView.setPadding(10, 0, 10, 0);
         textView.setText("Rooms");

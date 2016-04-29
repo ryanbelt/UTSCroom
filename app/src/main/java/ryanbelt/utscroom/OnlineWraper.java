@@ -14,7 +14,11 @@ public class OnlineWraper extends AsyncTask<Integer,Void,String> {
     @Override
     protected String doInBackground(Integer... integers) {
         try {
-            URL kujira = new URL(kujira_url+String.format("%d/%d%d",integers[0],integers[1],integers[2]));
+            String min=String.valueOf(integers[2]);
+            if(integers[2]<10){
+                min="0"+min;
+            }
+            URL kujira = new URL(kujira_url+String.format("%d/%d%s",integers[0],integers[1],min));
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(kujira.openStream()));
             String inputLine;
