@@ -20,7 +20,6 @@ public class OnlineWraper extends AsyncTask<Integer,Void,String> {
             String inputLine;
             String outputLine="";
             while ((inputLine = in.readLine()) != null)
-                //Log.d("myCheck",inputLine);
                 outputLine+=inputLine;
             in.close();
             return outputLine;

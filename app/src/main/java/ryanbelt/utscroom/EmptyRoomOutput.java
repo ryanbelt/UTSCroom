@@ -1,10 +1,8 @@
 package ryanbelt.utscroom;
 
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -44,7 +42,7 @@ public class EmptyRoomOutput extends AppCompatActivity implements AsyncResponse{
             wraper.delegate=this;
             wraper.execute(day,hour,min);
         }catch(Exception e){
-            Log.d("myCheck",e.toString());
+            Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
         }
 
 
@@ -137,11 +135,11 @@ public class EmptyRoomOutput extends AppCompatActivity implements AsyncResponse{
     public void todayDay(){
         Calendar calendar = Calendar.getInstance();
         day = calendar.get(Calendar.DAY_OF_WEEK);
-        if(day==0){
+        if(day==1){
             day=6;
         }
         else{
-            day-=1;
+            day-=2;
         }
     }
 }
