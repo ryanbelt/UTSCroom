@@ -3,6 +3,7 @@
     <string name="check_empty_room">Check Empty Room</string>
     <string name="check_room_schedule">Check Room Schedule</string>
     <string name="start">Start</string>
+    <string name="update">update</string>
     <string-array name="days">
         <item>Today</item>
         <item>Monday</item>

@@ -37,4 +37,13 @@
         android:layout_marginTop="43dp"
         android:layout_below="@+id/EmptyRoomButton"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/update"
+        android:id="@+id/UpdateButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/RoomSchedule" />
 </RelativeLayout>
