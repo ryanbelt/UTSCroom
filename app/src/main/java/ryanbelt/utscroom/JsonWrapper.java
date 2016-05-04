@@ -1,11 +1,11 @@
 package ryanbelt.utscroom;
 
-import ryanbelt.utscroom.RoomWraper;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Button;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.text.*;
@@ -53,7 +53,14 @@ public class JsonWrapper extends AsyncTask<Void, String, String> {
         }
 
         publishProgress("writing data file");
-
+        try {
+            String content = roomwrap.jsonFormat(scheduleList);
+            FileOutputStream outputStream = context.openFileOutput(roomwrap.FILE_NAME, Context.MODE_PRIVATE);
+            outputStream.write(content.getBytes());
+            outputStream.close();
+        }catch(Exception e){
+            return e.toString();
+        }
 
         return "Success: Data Update";
     }
