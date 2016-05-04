@@ -9,20 +9,22 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Calendar;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import ryanbelt.utscroom.OnlineWraper;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by Ryan on 2016-04-26.
  */
-public class EmptyRoomOutput extends AppCompatActivity implements AsyncResponse{
+public class EmptyRoomOutput extends AppCompatActivity{
     static String result;
     static String[] weeks={"Monday","Tuesday","Wednesday","Thursday","Friday",
     "Saturday","Sunday"};
     static int day;
-    static int hour;
-    static int min;
+    static String hour;
+    static String min;
     static String weekDay;
 
     @Override
@@ -30,37 +32,71 @@ public class EmptyRoomOutput extends AppCompatActivity implements AsyncResponse{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.empty_room_list);
         Bundle extras = getIntent().getExtras();
-        hour = extras.getInt("hour");
-        min = extras.getInt("min");
+        int extraMin= extras.getInt("min");
+        int extraHour= extras.getInt("hour");
         day= extras.getInt("day");
+        hour = String.valueOf(extraHour);
+        if(extraMin<30) {
+            min = "00";
+        }else{
+            min = "30";
+        }
+        if(extraHour<10){
+            hour = "0"+hour;
+        }
         if (day==-1){
             todayDay();
         }
         weekDay=weeks[day];
-        OnlineWraper wraper = new OnlineWraper();
-        try{
-            wraper.delegate=this;
-            wraper.execute(day,hour,min);
-        }catch(Exception e){
-            Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
-        }
+
+        createTable(emptyRoom().split(";"));
 
 
     }
 
-    @Override
-    public void processFinish(String output) {
-        //wrap the table content from the website
-        if(output.contains("code>")) {
-            result = output.substring(output.indexOf("<table>") + 7, output.indexOf("</table>"));
-            result = result.replace("<tr>", "").replace("<td>", "").replace("</td></tr>", ";").replace("</td>", ",");
-            //make all result as arraylist
-            String[] resultList = result.split(";");
-            createTable(resultList);
-        }else{
-            Toast toast = Toast.makeText(this,"Fail: Make sure wifi is on.",Toast.LENGTH_LONG);
+    public String emptyRoom(){
+        String roomsStr = "";
+        try {
+            String current=String.format("%s:%s",hour,min);
+            String time;
+            Calendar now;
+            JSONObject jsonObject = new JSONObject(new RoomWraper().jsonReader(EmptyRoomOutput.this));
+            JSONArray jsonArray = jsonObject.getJSONArray("RoomList");
+            for(int i=0; i<jsonArray.length();i++){
+                JSONObject roomObject = jsonArray.getJSONObject(i);
+                now = Calendar.getInstance();
+                now.set(Calendar.HOUR_OF_DAY,Integer.parseInt(hour));
+                now.set(Calendar.MINUTE,Integer.parseInt(min));
+                do{
+                    String reges;
+                    time = new SimpleDateFormat("HH:mm").format(now.getTime());
+                    try {
+                        JSONArray timeSche = roomObject.getJSONArray(time);
+                        JSONObject dayTimeSche = timeSche.getJSONObject(0);
+                        reges = dayTimeSche.get(String.valueOf(day)).toString();
+                    }catch(org.json.JSONException e){
+                        reges="None";
+                    }
+                    now.add(Calendar.MINUTE, 30);
+                    if (!reges.equals("None")) {
+                        if(!time.equals(current)){
+                            roomsStr += String.format("%s,%s,%s", roomObject.get("name"),time, reges);
+                        }else{
+                            roomsStr += String.format("%s,N/A,%s", roomObject.get("name"), reges);
+                        }
+                        break;
+                    }
+                    if(time.equals("23:30")){
+                        roomsStr += String.format("%s,23:30,%s", roomObject.get("name"), reges);
+                    }
+                }while(!time.equals("23:30"));
+                roomsStr+=";";
+            }
+        }catch(Exception e){
+            Toast toast = Toast.makeText(this,e.toString(),Toast.LENGTH_LONG);
             toast.show();
         }
+        return roomsStr.substring(0,roomsStr.length()-1);
     }
 
     public void createTable(String[] rooms){
@@ -71,11 +107,7 @@ public class EmptyRoomOutput extends AppCompatActivity implements AsyncResponse{
         int backgroundColor;
         //set column title
         textView=(TextView)findViewById(R.id.emptyTitle);
-        if(min<10) {
-            textView.setText(String.format("%s:    %d:%s", weekDay, hour, "0" + String.valueOf(min)));
-        }else{
-            textView.setText(String.format("%s:    %d:%d", weekDay, hour, min));
-        }
+        textView.setText(String.format("%s:    %s:%s", weekDay, hour,min));
         textView=(TextView)findViewById(R.id.emptyTableRooms);
         textView.setPadding(10, 0, 10, 0);
         textView.setText("Rooms");
@@ -89,7 +121,7 @@ public class EmptyRoomOutput extends AppCompatActivity implements AsyncResponse{
         textView.setGravity(Gravity.CENTER);
         textView.setText("Next Class");
         //setup each content
-        for(int i=1;i<rooms.length-1;i++) {
+        for(int i=0;i<rooms.length;i++) {
             String[] eachRoom=rooms[i].split(",");
             tableRow = new TableRow(this);
             //color select

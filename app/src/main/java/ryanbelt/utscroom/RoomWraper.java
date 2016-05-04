@@ -4,13 +4,19 @@ package ryanbelt.utscroom;
  * Created by Ryan on 2016-05-03.
  */
 
+import android.content.Context;
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.*;
@@ -24,11 +30,24 @@ public class RoomWraper {
     private static final String AVALIABLE_ROOM_URL="https://intranet.utsc.utoronto.ca/intranet2/RegistrarService";
     public static final String FILE_NAME="utscRoom.json";
 
+    public String jsonReader(Context context) throws Exception{
+        FileInputStream fis = context.openFileInput(FILE_NAME);
+        InputStreamReader isr = new InputStreamReader(fis);
+        BufferedReader bufferedReader = new BufferedReader(isr);
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            sb.append(line);
+        }
+        isr.close();
+        fis.close();
+        return sb.toString();
+    }
+
     public String jsonFormat(List<String> sceduleList) throws Exception{
         JSONObject jsonObject = new JSONObject();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date dateobj = new Date();
-        int counter=0;
         jsonObject.put("date",df.format(dateobj));
         JSONArray jsonRoomArray = new JSONArray();
         JSONArray jsonTimeArray;
@@ -37,7 +56,6 @@ public class RoomWraper {
         for (String room: sceduleList){
             jsonMessage = new JSONObject();
             String[] el = room.split(";");
-            jsonMessage.put("id",counter);
             jsonMessage.put("name",el[0]);
             for(int i=1; i<el.length;i++){
                 jsonTimeArray = new JSONArray();
@@ -50,6 +68,16 @@ public class RoomWraper {
                 jsonMessage.put(sche[0],jsonTimeArray);
             }
             jsonRoomArray.put(jsonMessage);
+        }
+        List<String> jsonValues = new ArrayList<String>();
+        for (int i = 0; i < jsonRoomArray.length(); i++) {
+            jsonValues.add(jsonRoomArray.getString(i));
+        }
+        Collections.sort(jsonValues);
+        jsonRoomArray = new JSONArray();
+        for(int i=0;i<jsonValues.size();i++) {
+            JSONObject newObj = new JSONObject(jsonValues.get(i));
+            jsonRoomArray.put(newObj);
         }
         jsonObject.put("RoomList",jsonRoomArray);
         return jsonObject.toString();

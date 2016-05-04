@@ -10,9 +10,6 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -62,22 +59,13 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse{
 
     public void checkDataTime(Button Update){
         try {
-            FileInputStream fis = openFileInput(RoomWraper.FILE_NAME);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line);
-            }
-            JSONObject jsonObject = new JSONObject(sb.toString());
+            JSONObject jsonObject = new JSONObject(new RoomWraper().jsonReader(MainActivity.this));
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Date dateobj = df.parse(df.format(new Date()));
             String jsonDate = jsonObject.getString("date");
             Date convertedJsonDate = df.parse(jsonDate);
-            Log.e("myCheck","current date:"+dateobj.toString());
-            Log.e("myCheck","json date:"+convertedJsonDate.toString());
+
             if(dateobj.after(convertedJsonDate)){
                 Toast toast = Toast.makeText(this,"Data outdated",Toast.LENGTH_SHORT);
                 toast.show();
