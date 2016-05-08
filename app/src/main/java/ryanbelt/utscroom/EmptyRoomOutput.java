@@ -71,8 +71,7 @@ public class EmptyRoomOutput extends AppCompatActivity{
                     String reges;
                     time = new SimpleDateFormat("HH:mm").format(now.getTime());
                     try {
-                        JSONArray timeSche = roomObject.getJSONArray(time);
-                        JSONObject dayTimeSche = timeSche.getJSONObject(0);
+                        JSONObject dayTimeSche = roomObject.getJSONObject(time);
                         reges = dayTimeSche.get(String.valueOf(day)).toString();
                     }catch(org.json.JSONException e){
                         reges="None";

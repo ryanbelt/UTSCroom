@@ -52,9 +52,11 @@ public class JsonWrapper extends AsyncTask<Void, String, String> {
             scheduleList.add(roomwrap.roomScedule(room));
         }
 
+        String[] dates = roomwrap.scheduleDate(reges.replace("\",\"", "\";\"").split(";")[0].split("<tr>")[1]);
+
         publishProgress("writing data file");
         try {
-            String content = roomwrap.jsonFormat(scheduleList);
+            String content = roomwrap.jsonFormat(scheduleList, dates);
             FileOutputStream outputStream = context.openFileOutput(roomwrap.FILE_NAME, Context.MODE_PRIVATE);
             outputStream.write(content.getBytes());
             outputStream.close();

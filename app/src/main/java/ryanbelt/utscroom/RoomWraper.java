@@ -44,13 +44,33 @@ public class RoomWraper {
         return sb.toString();
     }
 
-    public String jsonFormat(List<String> sceduleList) throws Exception{
+    public String[] scheduleDate(String date){
+        Pattern datePat = Pattern.compile("<th>(.*?)<");
+        Matcher matcher;
+        matcher = datePat.matcher(date);
+        List<String> dateList = new ArrayList<String>();
+        while(matcher.find()){
+            System.out.println("found");
+            dateList.add(matcher.group(0));
+            System.out.println(matcher.group(0));
+        }
+        String ret="";
+        for(int i=1;i<dateList.size();i++){
+            ret+=dateList.get(i).substring(dateList.get(i).length()-3,dateList.get(i).length()-1)+";";
+        }
+        return ret.replace(" ","").split(";");
+    }
+    public String jsonFormat(List<String> sceduleList, String[] dates) throws Exception{
         JSONObject jsonObject = new JSONObject();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date dateobj = new Date();
         jsonObject.put("date",df.format(dateobj));
+        JSONObject jsonDate = new JSONObject();
+        for(int i=0;i<dates.length;i++){
+            jsonDate.put(String.valueOf(i),dates[i]);
+        }
+        jsonObject.put("weekDate",jsonDate);
         JSONArray jsonRoomArray = new JSONArray();
-        JSONArray jsonTimeArray;
         JSONObject jsonTimeObject;
         JSONObject  jsonMessage;
         for (String room: sceduleList){
@@ -58,14 +78,12 @@ public class RoomWraper {
             String[] el = room.split(";");
             jsonMessage.put("name",el[0]);
             for(int i=1; i<el.length;i++){
-                jsonTimeArray = new JSONArray();
                 jsonTimeObject = new JSONObject();
                 String[] sche = el[i].split(",");
                 for(int j=1;j<sche.length;j++) {
                     jsonTimeObject.put(String.valueOf(j-1),sche[j]);
                 }
-                jsonTimeArray.put(jsonTimeObject);
-                jsonMessage.put(sche[0],jsonTimeArray);
+                jsonMessage.put(sche[0],jsonTimeObject);
             }
             jsonRoomArray.put(jsonMessage);
         }
