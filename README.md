@@ -8,7 +8,7 @@ Automatically update `(wifi require)` build in json (monday to sunday in this we
 
 Support offline available rooms checking if json up to date. Will be non-accurate or unable to check room if json file not updated.
 
-`Room schedule feature is still on process`
+Support display room schedule by selected room number
 
 ====
 Using [UTSC Room Schedule](https://www.utsc.utoronto.ca/~registrar/scheduling/room_schd)
