@@ -41,10 +41,11 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse{
                 updateJson(Update);
             }
         });
+
        RoomScheduleButton.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               startActivity(new Intent(MainActivity.this,RoomScheduleOutput.class));
+               startActivity(new Intent(MainActivity.this,RoomScheduleInput.class));
            }
        });
     }

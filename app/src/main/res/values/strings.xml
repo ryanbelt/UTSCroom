@@ -4,6 +4,7 @@
     <string name="check_room_schedule">Check Room Schedule</string>
     <string name="start">Start</string>
     <string name="update">update</string>
+    <string name="create_table">Create Table</string>
     <string-array name="days">
         <item>Today</item>
         <item>Monday</item>

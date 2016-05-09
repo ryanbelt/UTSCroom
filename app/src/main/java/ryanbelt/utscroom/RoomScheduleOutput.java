@@ -3,10 +3,10 @@ package ryanbelt.utscroom;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,7 +25,8 @@ public class RoomScheduleOutput extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.room_schedule);
-        createTable("IC-212");
+        Bundle extras = getIntent().getExtras();
+        createTable(extras.getString("room"));
 
     }
 
@@ -66,7 +67,6 @@ public class RoomScheduleOutput extends AppCompatActivity {
                 if(roomObject.get("name").equals(roomNumber)){
                     now = Calendar.getInstance();
                     String time;
-                    Log.e("myCheck",roomObject.toString());
                     for(int j=0;j<7;j++) {
                         String lec = "None";
                         String record="";
@@ -105,9 +105,7 @@ public class RoomScheduleOutput extends AppCompatActivity {
                             } catch (org.json.JSONException e) {
                                 dayTimeSche = new JSONObject(none);
                             }
-                            Log.e("myCheck",dayTimeSche.toString());
                             dp+=halfHourDP;
-//                            Log.e("myCheck", dayTimeSche.toString());
                             now.add(Calendar.MINUTE, 30);
                             lec = dayTimeSche.get(String.valueOf(j)).toString();
                             if(lec.equals("None")&&record.equals("")){
@@ -157,19 +155,12 @@ public class RoomScheduleOutput extends AppCompatActivity {
 
                         } while (!time.equals("21:30"));
                     }
-
-//                    <TextView
-//                    android:layout_width="match_parent"
-//                    android:layout_height="80dp"
-//                    android:gravity="center"
-//                    android:background="@drawable/gray_border"
-//                    android:text="1am" />
-
                     break;
                 }
             }
         }catch(Exception e){
-
+            Toast toast = Toast.makeText(this,e.toString(),Toast.LENGTH_LONG);
+            toast.show();
         }
 
     }
