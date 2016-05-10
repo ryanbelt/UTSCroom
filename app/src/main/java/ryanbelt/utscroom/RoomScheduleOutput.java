@@ -135,6 +135,15 @@ public class RoomScheduleOutput extends AppCompatActivity {
                                         record="";
                                         if(!lec.equals("None")){
                                             record=lec;
+                                        }else{
+                                            if(now.get(Calendar.MINUTE)==0){
+                                                newtext= new TextView(this);
+                                                newtext.setBackgroundResource(R.drawable.gray_border);
+                                                pixels = (int) (dp * scale + 0.5f);
+                                                newtext.setHeight(pixels);
+                                                dayLayout.addView(newtext);
+                                                dp=0;
+                                            }
                                         }
                                     }
                                     if(time.equals("21:30")){
